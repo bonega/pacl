@@ -1,9 +1,9 @@
 (ns pacl.unpack
   (:use pacl.core)
-  (:require [clojure.java.io :as jio])
+  (:require [clojure.java.io :as jio] [pacl.core])
   (:import (java.util.zip ZipFile ZipInputStream)
            (java.io ByteArrayOutputStream ByteArrayInputStream)
-           (de.innosystec)))
+           (pacl.core Archive)))
 
 (def *rar-exts* #{".rar" ".cbr"})
 
