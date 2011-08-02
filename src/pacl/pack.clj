@@ -5,6 +5,8 @@
 
 (import-static java.util.zip.ZipOutputStream DEFLATED STORED )
 
+(def comp-methods {:deflated DEFLATED :stored STORED})
+
 (defn- fix-dir-name [filename]
   (if (and (.isDirectory (jio/file filename)) (not= \/ (last filename)))
     (str filename "/")
@@ -19,7 +21,7 @@
 (defmulti compress
   "([source target & {:keys [method comment]}])
    Compress source entries to a target that can be coerced into an OutputStream.
-   Can take an optional map. See java.util.zip.ZipEntry for details."
+   Can take an optional map. Currently only supports :stored and :deflated as methods"
   (fn [source target & opts] (type source)))
 
 (defmethod compress clojure.lang.IPersistentCollection
@@ -27,16 +29,16 @@
   (let [out (jio/output-stream target)
         zout (ZipOutputStream. out)]
     (doto zout
-      (.setLevel (or method DEFLATED))
+      (.setLevel (get comp-methods method DEFLATED))
       (.setComment (or comment "")))
     
     (doseq [{:keys [filename comment inputstream directory?]} source
-            :let [e (ZipEntry. (fix-dir-name filename))]]
+            :let [e (ZipEntry. (fix-dir-name filename))]
+            :when (not directory?)]
       (when comment
         (.setComment e comment))
       (.putNextEntry zout e)
-      (when-not directory?
-        (jio/copy @inputstream zout)))
+      (jio/copy @inputstream zout))
     (try (.close zout)
          (catch ZipException err
            (.close out)
@@ -66,7 +68,10 @@
         filelist (mapcat (comp flatten list-files jio/file) files)]
     (map (partial make-relative-entry root) filelist)))
 
-(defn compress-files [files to & opts]
+(defn compress-files
+  "Creates a new archive from a coll of files (or directories).
+   Uses clojure.java.io/input-stream to coerce target"
+  [files to & opts]
   (apply compress (apply files->entries files) to opts))
 
 
