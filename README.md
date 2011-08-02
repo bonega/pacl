@@ -6,8 +6,7 @@ It provides a more sane clojure interface for working with archives.
 The most interesting feature is that it tries to handle both packing
 and unpacking with either files or streams.
 
-For example you can read images from
-<tt>http://somethingthatisaziparchive</tt>.
+For example you can read images from http://somethingthatisaziparchive
 Rescale the image and create a new zip with the scaled images.
 All that without touching the filesystem.
 
@@ -19,7 +18,7 @@ Rar-archives can only be read from files.
 <tt>compress</tt> and <tt>open-archive</tt> tries to handle anything
 that can be coerced into streams.
 
-   (extract-files "https://github.com/bonega/pacl/zipball/master" "thesourceofthislib")
+     (extract-files "https://github.com/bonega/pacl/zipball/master" "thesourceofthislib")
 
 Just extracts all files from something that can be coerced into an inputstream
 
