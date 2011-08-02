@@ -1,18 +1,20 @@
+# Pacl
+
 This library is just wrapping https://github.com/edmund-wagner/junrar and sun's zip utilities.
 It provides a more sane clojure interface for working with archives.
 
-You can do fun stuff like:
+## Usage:
 
-(extract-files "https://github.com/bonega/pacl/zipball/master" "thesourceofthislib")
+   (extract-files "https://github.com/bonega/pacl/zipball/master" "thesourceofthislib")
 
 Just extracts all files from something that can be coerced into an inputstream
 
-(with-open [a (open-archive "somefile.zip")]
+     (with-open [a (open-archive "somefile.zip")]
            (compress (filter #(str-contains (:filename %) ".jpg") (:entries a)) "newarchive.zip" :method STORED)
 
 Takes all .jpg entries in a zip and creates another archive with no compression
 
-(compress-files ["data/"] "filename.zip")
+      (compress-files ["data/"] "filename.zip")
 
 compresses all files (or directories) to a new archive.
 

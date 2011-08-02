@@ -1,7 +1,7 @@
 (ns pacl.pack
   (:use [clojure.contrib.import-static])
-  (:require [clojure.java.io :as jio])
-  (:import (java.util.zip ZipOutputStream ZipEntry ZipException)))
+  (:require [clojure.java.io :as jio] [pacl.core])
+  (:import (java.util.zip ZipOutputStream ZipEntry ZipException) (pacl.core Archive)))
 
 (import-static java.util.zip.ZipOutputStream DEFLATED STORED )
 
